@@ -1,0 +1,198 @@
+#creating a class for the courses which is basically an outline for an object, each class has all the attributes that the user requires for the main program
+# The init function assigns the values for each object in order to create the attributes
+class Course:
+    def __init__(self,course_id, course_name, fee):
+        self.course_id = course_id
+        self.course_name = course_name
+        self.fee = fee
+
+#The students class is similar to the course class where the student ID, name and email are all the attributes of the class "Students" therefore it tells a user what to expect in the main function
+class Students:
+    def __init__(self, student_id,student_name, email):
+        self.student_id = student_id
+        self.student_name = student_name
+        self.email = email
+        self.courses = [] #will display a list of courses when added
+        self.student_bal = 0 #initial balance of each new student
+
+
+#The student enroll function which enrolls student in a course, it prevents the duplication of courses based on the course list
+    def stu_enroll (self, course):
+        if course in self.courses:
+            print (f" {course.course_id}:{course.course_name} is already added to your account")
+        else:
+            self.courses.append(course)
+            print (f"{self.student_name}, your enrollment is successful for {course.course_id} {course.course_name}")
+            self.student_bal += course.fee
+
+#This will display the balance that is on student account after individual courses are added
+    def get_total_fee (self):
+       return self.student_bal
+
+#This class consists of the main functions being used in the program
+class RegistrationSystem:
+    def __init__(self):
+        self.courses = [Course ("111","Information Technology","200")] #A list of courses on the system
+        self.students = {"2244":Students("2244", "Jim Bleu", "jimbleu@gmail.com")} #Registered student
+
+#Adding a course to the course list, while preventing the duplication of course
+    def add_courses (self,course_id, name, fee):
+        for course in self.courses:
+            if course.course_id == (course_id):
+                print (f"{course_id} cannot be duplicated in the system")
+                return
+        self.courses.append(Course(course_id, name, fee))
+        print (f"course {course_id} {name}, added successfully")
+
+#Registering a student while ensuring that more than one student does not have the same ID number
+    def register_student (self, student_id, student_name, email):
+        if student_id in self.students:
+            print (f"{student_name} is already registered")
+        else:
+            new_students = {student_id:Students(student_id, student_name, email)}
+            self.students.update(new_students)
+            print (f"Student {student_name} is registered successfully")
+
+#Adding a student to a course they are not already enrolled in
+    def enroll_in_course(self, student_id, course_id):
+        if student_id not in self.students:
+            print ("Student not found in system")
+            return
+        for course in self.courses:
+            if course_id==course.course_id:
+                self.students[student_id].stu_enroll(course)
+                print (f"{student_name} registered successfully to {course_name}")
+        else:
+            print ("Registration successful")
+
+#Calculating the payment required after a specific number of courses are added to a student's account
+    def calculate_payment (self, student_id):
+        if student_id in self.students:
+            student = self.students[student_id]
+            total_fee = student.get_total_fee()
+            print (f"{student.student_name} is required to pay: ${total_fee}")
+
+#The minimum payment required to be paid
+            min_payment = 0.4 * total_fee
+            print (f"You are required to pay ${min_payment} in order to be registered")
+
+            payment= float (input("Enter payment amount: $"))
+            if payment>= min_payment:
+                total_fee -= payment
+                print (f"Transaction was successful, current balance is {total_fee}")
+            else:
+                print ("Transaction unsuccessful, you have insufficient balance")
+        else:
+         print ("Student is not yet registered")
+
+#Checks the balance on the student's account
+    def check_student_balance(self,student_id):
+        if student_id in self.students:
+            print (f"Your current balance is: ${self.students[student_id].student_bal}")
+
+#Displays all the courses that was added to the course list
+    def show_courses(self):
+        for course in self.courses:
+            print(f"Course ID:{course.course_id}")
+            print(f"Course Name:{course.course_name}")
+            print(f"Course Fee:{course.fee}\n")
+
+#Displays all registered students
+    def show_registered_students(self):
+        for student in self.students.values():
+            print(f"Student ID:{student.student_id}")
+            print(f"Student Name:{student.student_name}")
+            print(f"Student Balance:{student.student_bal}\n")
+
+#Displays all the students in a specific course
+    def show_students_in_course(self, course_id):
+            for student in self.students.values():
+                for course in student.courses:
+                    if course_id == course.course_id:
+                       print(f"Student ID:{student.student_id}:{student.student_name} is registered for {course.course_id}\n")
+            else:
+                print ("There is no registration for this course as yet")
+
+#THe executable main program
+if __name__ == '__main__':
+    system = RegistrationSystem ()
+
+    while True: #Loops the conditions which allows user to choose different options and then exit when finished
+        print ("\n---------------------------------")
+        print ("\n____________MENU_________________")
+        print ("1. Add Course")
+        print ("2. Register Student")
+        print ("3. Enroll student in a course")
+        print ("4. Calculate Payment")
+        print ("5. Check Student Balance")
+        print ("6. View courses")
+        print ("7. View registered students")
+        print ("8. Display students in a course")
+        print ("9. Exit")
+
+        option = input("Please select an option: ")
+
+        if option == "1":
+            try:
+                course_id = int(input("Please enter course ID: "))
+                course_name = input("please enter course name: ")
+                course_fee = float(input("please enter course fee: "))
+                system.add_courses(course_id, course_name, course_fee)
+            except ValueError:
+                    print ("Please try again, enter a valid ID number or course fee")
+
+
+        elif option == "2":
+            student_id= input("Please enter student ID: ")
+            student_name = input ("Please enter student name: ")
+            email = input ("Please enter student email:" )
+            system.register_student(student_id, student_name, email)
+
+
+        elif option =="3":
+            try:
+                student_id = input("Please enter student ID: ")
+                course_id = int(input("Please enter course ID: "))
+                system.enroll_in_course(student_id, course_id)
+            except ValueError:
+                print("Please try again, enter a valid ID number")
+
+
+        elif option == "4":
+            student_id = input("Please enter student ID: ")
+            system.calculate_payment(student_id)
+
+        elif option =="5":
+            student_id = input("Please enter Student ID: ")
+            system.check_student_balance(student_id)
+
+        elif option=="6":
+            system.show_courses()
+
+        elif option=="7":
+            system.show_registered_students()
+
+        elif option=="8":
+            try:
+                course_id = int(input("Please enter course ID: "))
+                system.show_students_in_course(course_id)
+
+            except ValueError:
+                print ("Invalid ID, please use a valid 4 digit number")
+
+        elif option =="9":
+            print("Goodbye")
+            break #breaks the while loop
+        else:
+            print("Please choose a valid option from 1-9")
+            break #breaks the main program
+
+
+
+
+
+
+
+
+
+
