@@ -1,0 +1,20 @@
+Author: Octasha Sterling
+Date Created: 12/12/2024
+Course: ITT103
+GitHub Public URL to Code:https://github.com/TaeShaSterling/Registration-System
+
+
+The purpose of the program:
+This program aims to carry out a set of task which is used in a school registration system. Its aim is for users to be able to add or update courses, register or enroll students in courses etc. 
+
+How to run it:
+In order to run this program user must have a python software on their device to open the document, after which the main menu will display the options and the user will be prompt to enter a valid input. After the selections are made, the program carries out a specific tasks based on user choice, the loop continues until the user exits the program. If an invalid option was chosen, an error message will be displayed. 
+
+
+Assumptions/Limitations: 
+1. The program is limited to one registered student and course
+2. Once an incorrect entry is made, an error message is displayed
+3. All new student balances are $0 initially
+4. No two courses or courses with same ID can be added. Additionally students can only be registered in a course once
+5. Student ID is the main key used to identify students
+6. Once a course is added, it cannot be removed, same with registering a student
